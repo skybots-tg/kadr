@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\kadr.ico</ApplicationIcon>
+    <AssemblyName>Kadr</AssemblyName>
+    <RootNamespace>Kadr</RootNamespace>
+    <Product>Кадр</Product>
+    <Version>1.1.0</Version>
+    <Authors>Kadr</Authors>
+    <Description>Скриншоты как на Mac — для Windows</Description>
+    <RepositoryUrl>https://github.com/skybots-tg/kadr</RepositoryUrl>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SatelliteResourceLanguages>ru</SatelliteResourceLanguages>
+    <TieredPGO>true</TieredPGO>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\kadr.ico" />
+  </ItemGroup>
+
+</Project>
