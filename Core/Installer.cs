@@ -88,6 +88,18 @@ namespace Kadr.Core
             else Process.Start(new ProcessStartInfo(InstalledExe, args) { UseShellExecute = true, WorkingDirectory = InstallDir });
         }
 
+        /// <summary>Keep the "Apps &amp; features" entry in sync after an over-the-air update.</summary>
+        public static void RefreshRegistration()
+        {
+            if (!IsInstalledCopy) return;
+            try
+            {
+                using var k = Registry.CurrentUser.OpenSubKey(UninstallKey, true);
+                if (k != null && (k.GetValue("DisplayVersion") as string) != Version) k.SetValue("DisplayVersion", Version);
+            }
+            catch { }
+        }
+
         // ------------------------------------------------------------------ uninstall
 
         public static void Uninstall()

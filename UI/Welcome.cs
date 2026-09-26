@@ -17,7 +17,6 @@ namespace Kadr.UI
 
         public static void Show()
         {
-            _open?.Close();
             var stack = new StackPanel { Width = 330 };
             var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 12) };
             if (App.AppIconImage != null) head.Children.Add(new Image { Source = App.AppIconImage, Width = 30, Height = 30, Margin = new Thickness(0, 0, 10, 0) });
@@ -48,7 +47,34 @@ namespace Kadr.UI
             Row(Hotkeys.FirstFor(HotkeyAction.FullScreen) ?? "—", "Весь экран");
             Row("A T B", "Стрелка, текст, размытие…");
             Row("Enter", "Скопировать и закрыть");
+            Present(stack, 9);
+        }
 
+        /// <summary>"Updated to X" card with the first lines of the release notes.</summary>
+        public static void ShowUpdated(string version, string notes)
+        {
+            var stack = new StackPanel { Width = 330 };
+            var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 8) };
+            if (App.AppIconImage != null) head.Children.Add(new Image { Source = App.AppIconImage, Width = 30, Height = 30, Margin = new Thickness(0, 0, 10, 0) });
+            var titles = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+            titles.Children.Add(new TextBlock { Text = $"Кадр обновлён до {version}", Foreground = Brushes.White, FontSize = 15, FontWeight = FontWeights.SemiBold, FontFamily = KFonts.Family });
+            titles.Children.Add(new TextBlock { Text = "Обновление установилось автоматически", Foreground = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)), FontSize = 11.5, FontFamily = KFonts.Family });
+            head.Children.Add(titles);
+            stack.Children.Add(head);
+            foreach (var line in (notes ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries))
+            {
+                stack.Children.Add(new TextBlock
+                {
+                    Text = "•  " + line, Foreground = new SolidColorBrush(Color.FromArgb(215, 255, 255, 255)), FontSize = 12.5,
+                    FontFamily = KFonts.Family, TextWrapping = TextWrapping.Wrap, Margin = new Thickness(0, 4, 0, 0),
+                });
+            }
+            Present(stack, 12);
+        }
+
+        static void Present(StackPanel stack, double seconds)
+        {
+            _open?.Close();
             var card = new Border
             {
                 Background = new SolidColorBrush(Color.FromArgb(246, 30, 30, 34)), CornerRadius = new CornerRadius(14), Padding = new Thickness(18, 16, 18, 16),
@@ -71,7 +97,7 @@ namespace Kadr.UI
                 w.BeginAnimation(UIElement.OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(220)));
                 tt.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(320)) { EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut } });
             };
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(9) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(seconds) };
             void Hide()
             {
                 timer.Stop();

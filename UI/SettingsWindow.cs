@@ -82,6 +82,8 @@ namespace Kadr.UI
             var sys = new System.Collections.Generic.List<UIElement>
             {
                 ToggleRow("Запускать вместе с Windows", null, Installer.AutoStart, v => Installer.AutoStart = v),
+                ToggleRow("Обновлять автоматически", "Новые версии с GitHub ставятся сами, когда вы не делаете снимок", s.AutoUpdate, v => s.AutoUpdate = v),
+                UpdateRow(),
             };
             if (Installer.IsInstalledCopy)
             {
@@ -159,6 +161,47 @@ namespace Kadr.UI
             t.MouseEnter += (_, _) => t.TextDecorations = TextDecorations.Underline;
             t.MouseLeave += (_, _) => t.TextDecorations = null;
             return t;
+        }
+
+        Grid UpdateRow()
+        {
+            var status = new TextBlock { FontSize = 12, Foreground = TextDim, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
+            void Status(string t) { status.Text = t; status.Visibility = Visibility.Visible; }
+            var btn = new PillButton("Проверить", false);
+            bool busy = false;
+            btn.Click += async () =>
+            {
+                if (busy) return;
+                busy = true;
+                try
+                {
+                    Status("Проверяю…");
+                    var r = await Updater.FetchLatestAsync();
+                    Settings.Current.LastUpdateCheck = DateTime.Now;
+                    if (!Updater.IsNewer(r)) { Status("У вас последняя версия"); return; }
+                    if (!Installer.IsInstalledCopy)
+                    {
+                        Status($"Доступна версия {r.Version} — откройте страницу релиза");
+                        Process.Start(new ProcessStartInfo(r.PageUrl) { UseShellExecute = true });
+                        return;
+                    }
+                    var progress = new Progress<double>(p => Status($"Скачиваю {r.Version}… {Math.Round(p * 100)}%"));
+                    var path = await Updater.DownloadAsync(r, progress);
+                    Status("Устанавливаю и перезапускаю…");
+                    await System.Threading.Tasks.Task.Delay(400);
+                    Close();
+                    App.Instance.ApplyUpdate(r, path);
+                }
+                catch (Exception ex)
+                {
+                    App.Log(ex);
+                    Status("Не удалось: " + ex.Message);
+                }
+                finally { busy = false; }
+            };
+            var g = Row($"Версия {Installer.Version}", null, btn);
+            ((StackPanel)g.Children[0]).Children.Add(status);
+            return g;
         }
 
         static Grid CornersRow()

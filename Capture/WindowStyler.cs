@@ -18,9 +18,9 @@ namespace Kadr.Capture
         // (blur sigma, vertical offset, opacity) — contact, mid and ambient layers
         static readonly (double sigma, double dy, double opacity)[] Shadows =
         {
-            (1.0, 0.6, 0.42),
-            (6, 4, 0.28),
-            (20, 18, 0.62),
+            (1.0, 0.5, 0.22),
+            (6, 3, 0.10),
+            (20, 14, 0.36),
         };
 
         public static PixelImage Style(PixelImage window, double scale, bool shadow)

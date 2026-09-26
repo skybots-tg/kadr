@@ -17,6 +17,9 @@ namespace Kadr.Core
         public bool ShowThumbnail { get; set; } = true;
         public bool ShowMagnifier { get; set; } = true;
         public bool FirstRunDone { get; set; }
+        public bool AutoUpdate { get; set; } = true;
+        public DateTime LastUpdateCheck { get; set; }
+        public string UpdateNotes { get; set; }
 
         public string LastColor { get; set; } = "#FF3B30";
         public int LastSize { get; set; } = 1;

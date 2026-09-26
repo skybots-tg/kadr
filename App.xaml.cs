@@ -114,7 +114,9 @@ namespace Kadr
             _hook.Start();
 
             InitAutoStart();
+            if (Installer.IsInstalledCopy) { Updater.Cleanup(); Installer.RefreshRegistration(); }
             _tray = new Tray(this);
+            StartUpdateLoop();
 
             WarmUp();
             if (!Settings.Current.FirstRunDone || Has("--welcome"))
@@ -123,6 +125,9 @@ namespace Kadr
                 Settings.Save();
                 Welcome.Show();
             }
+            if (Has("--updated"))
+                Dispatcher.BeginInvoke(() => { Welcome.ShowUpdated(Installer.Version, Settings.Current.UpdateNotes); Settings.Current.UpdateNotes = null; Settings.Save(); },
+                    DispatcherPriority.ApplicationIdle);
             if (Has("--settings")) Dispatcher.BeginInvoke(SettingsWindow.ShowSingle, DispatcherPriority.ApplicationIdle);
             if (Has("--capture")) Dispatcher.BeginInvoke(() => StartCapture(false), DispatcherPriority.ApplicationIdle);
         }
@@ -152,6 +157,74 @@ namespace Kadr
                 }
                 catch (Exception ex) { Log(ex); }
             }, DispatcherPriority.ApplicationIdle);
+        }
+
+        // ------------------------------------------------------------------ over-the-air updates
+
+        DispatcherTimer _updateTimer;
+        (Updater.Release release, string path)? _pendingUpdate;
+        bool _checking;
+
+        void StartUpdateLoop()
+        {
+            _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(45) };
+            bool first = true;
+            _updateTimer.Tick += async (_, _) =>
+            {
+                if (first) { first = false; if (Installer.IsInstalledCopy) Updater.Cleanup(); } // the previous exe has exited by now
+                _updateTimer.Interval = TimeSpan.FromMinutes(_pendingUpdate != null ? 1 : 30);
+                if (_pendingUpdate is { } p) { TryApplyWhenIdle(p.release, p.path); return; }
+                var s = Settings.Current;
+                if (!s.AutoUpdate || !Installer.IsInstalledCopy || _checking) return;
+                if (DateTime.Now - s.LastUpdateCheck < TimeSpan.FromHours(6)) return;
+                _checking = true;
+                try
+                {
+                    var r = await Updater.FetchLatestAsync();
+                    s.LastUpdateCheck = DateTime.Now;
+                    Settings.Save();
+                    if (Updater.IsNewer(r))
+                    {
+                        var path = await Updater.DownloadAsync(r);
+                        _pendingUpdate = (r, path);
+                        _updateTimer.Interval = TimeSpan.FromSeconds(5);
+                    }
+                }
+                catch (Exception ex) { Log(ex); }
+                finally { _checking = false; }
+            };
+            _updateTimer.Start();
+        }
+
+        /// <summary>Swap and restart only when nothing is on screen, so an update never interrupts work.</summary>
+        void TryApplyWhenIdle(Updater.Release r, string path)
+        {
+            if (CaptureSession.Current != null || Windows.Count > 0) return;
+            ApplyUpdate(r, path);
+        }
+
+        public void ApplyUpdate(Updater.Release r, string path)
+        {
+            try
+            {
+                Settings.Current.UpdateNotes = Updater.Summary(r.Notes);
+                Settings.Save();
+                Updater.Apply(path);
+                _pendingUpdate = null;
+                RestartInto(Installer.InstalledExe, "--updated");
+            }
+            catch (Exception ex) { Log(ex); _pendingUpdate = null; }
+        }
+
+        /// <summary>Hand over to a fresh process: release the hook, tray icon and single-instance lock first.</summary>
+        void RestartInto(string exe, string args)
+        {
+            _updateTimer?.Stop();
+            _hook?.Dispose(); _hook = null;
+            _tray?.Dispose(); _tray = null;
+            try { _mutex?.ReleaseMutex(); _mutex?.Dispose(); _mutex = null; } catch { }
+            Process.Start(new ProcessStartInfo(exe, args) { UseShellExecute = false, WorkingDirectory = Path.GetDirectoryName(exe) });
+            Shutdown();
         }
 
         public void ApplyHotkeys()
