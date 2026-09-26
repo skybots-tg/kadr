@@ -12,7 +12,7 @@
     <AssemblyName>Kadr</AssemblyName>
     <RootNamespace>Kadr</RootNamespace>
     <Product>Кадр</Product>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Authors>Kadr</Authors>
     <Description>Скриншоты как на Mac — для Windows</Description>
     <RepositoryUrl>https://github.com/skybots-tg/kadr</RepositoryUrl>

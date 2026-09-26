@@ -60,6 +60,21 @@ namespace Kadr
                 return;
             }
 
+            if (Has("--test-window") && args.Length >= 3)
+            {
+                // debug: style a real on-screen window exactly like a Space+click capture
+                _ephemeral = true;
+                var snap = ScreenCapture.TakeSnapshot();
+                var win = snap.Windows.Find(x => x.Title.Contains(args[1], StringComparison.OrdinalIgnoreCase));
+                if (win != null)
+                {
+                    var raw = ScreenCapture.CaptureWindow(snap, win);
+                    var mon = ScreenCapture.MonitorUnderCursor(snap.Monitors);
+                    File.WriteAllBytes(args[2], Output.EncodePng(WindowStyler.Style(raw, mon.Scale, !Has("--no-shadow"))));
+                }
+                Shutdown();
+                return;
+            }
             if (Has("--uninstall"))
             {
                 if (Has("--quiet")) Installer.Uninstall();
