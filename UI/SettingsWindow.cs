@@ -74,7 +74,8 @@ namespace Kadr.UI
 
             root.Children.Add(Section("Снимок"));
             root.Children.Add(Card(
-                ToggleRow("Тень у снимков окон", "Скруглённые углы и мягкая тень, как на Mac. Alt+клик — без тени", s.WindowShadow, v => s.WindowShadow = v),
+                ToggleRow("Тень у снимков окон", "Мягкая тень, как на Mac. Alt+клик — без тени", s.WindowShadow, v => s.WindowShadow = v),
+                CornersRow(),
                 ToggleRow("Лупа при выделении", "Увеличение, координаты и цвет пикселя под курсором", s.ShowMagnifier, v => s.ShowMagnifier = v)));
 
             root.Children.Add(Section("Система"));
@@ -158,6 +159,18 @@ namespace Kadr.UI
             t.MouseEnter += (_, _) => t.TextDecorations = TextDecorations.Underline;
             t.MouseLeave += (_, _) => t.TextDecorations = null;
             return t;
+        }
+
+        static Grid CornersRow()
+        {
+            var seg = new Segmented(new (FrameworkElement, string)[]
+            {
+                (new TextBlock { Text = "Классика", FontSize = 12.5, Foreground = Brushes.White }, "Как в macOS до 26-й версии"),
+                (new TextBlock { Text = "macOS 26", FontSize = 12.5, Foreground = Brushes.White }, "Круглее, как в macOS 26"),
+            }, null);
+            seg.Selected = Settings.Current.WindowCorners == 0 ? 0 : 1;
+            seg.Picked += i => { seg.Selected = i; Settings.Current.WindowCorners = i; Settings.Save(); };
+            return Row("Скругление углов окна", "Одинаковое для окон любого размера", seg);
         }
 
         Grid FolderRow()

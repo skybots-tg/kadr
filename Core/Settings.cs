@@ -11,6 +11,8 @@ namespace Kadr.Core
         public string Folder { get; set; } = DefaultFolder();
         public bool CopyToClipboard { get; set; } = true;
         public bool WindowShadow { get; set; } = true;
+        /// <summary>0 — classic macOS (10 pt corners), 1 — macOS 26 (rounder).</summary>
+        public int WindowCorners { get; set; } = 1;
         public bool PlaySound { get; set; } = true;
         public bool ShowThumbnail { get; set; } = true;
         public bool ShowMagnifier { get; set; } = true;

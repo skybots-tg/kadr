@@ -31,6 +31,7 @@ namespace Kadr.Core
             Settings.Current.LastSize = 1;
             Settings.Current.TextStyle = 0;
             Settings.Current.BlurKind = 0;
+            Settings.Current.WindowCorners = 1;
 
             var desk = Load(Path.Combine(assets, "desk.png"));
             var winScene = Load(Path.Combine(assets, "winscene.png"));

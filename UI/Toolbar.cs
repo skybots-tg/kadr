@@ -121,6 +121,7 @@ namespace Kadr.UI
     {
         readonly List<Border> _items = new();
         int _selected = -1;
+        public event Action<int> Picked;
 
         public Segmented(IEnumerable<(FrameworkElement content, string tip)> items, Action<int> pick, double minWidth = 30)
         {
@@ -144,7 +145,7 @@ namespace Kadr.UI
                 int idx = i++;
                 b.MouseEnter += (_, _) => { if (idx != _selected) b.Background = Theme.Hover; };
                 b.MouseLeave += (_, _) => { if (idx != _selected) b.Background = Brushes.Transparent; };
-                b.MouseLeftButtonDown += (_, e) => { e.Handled = true; pick(idx); };
+                b.MouseLeftButtonDown += (_, e) => { e.Handled = true; pick?.Invoke(idx); Picked?.Invoke(idx); };
                 _items.Add(b);
                 row.Children.Add(b);
             }

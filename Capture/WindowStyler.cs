@@ -12,7 +12,7 @@ namespace Kadr.Capture
     public static class WindowStyler
     {
         // DIPs, multiplied by the monitor scale
-        const double Radius = 10;
+        public static double CornerRadius => Settings.Current.WindowCorners == 0 ? 10 : 16;
         const double SideMargin = 44, TopMargin = 32, BottomMargin = 64;
 
         // (blur sigma, vertical offset, opacity) — contact, mid and ambient layers
@@ -29,7 +29,8 @@ namespace Kadr.Capture
             int trim = window.Width > 8 && window.Height > 8 ? 1 : 0;
             var core = trim > 0 ? window.Crop(new System.Windows.Int32Rect(trim, trim, window.Width - 2 * trim, window.Height - 2 * trim)) : window;
             int w = core.Width, h = core.Height;
-            double r = Math.Min(Radius * scale, Math.Min(w, h) / 2.0);
+            // fixed in DIPs like macOS points: the same curve for every window size
+            double r = Math.Min(CornerRadius * scale, Math.Min(w, h) / 2.0);
 
             var coverage = new float[w * h];
             var masked = MaskAndRim(core, r, coverage);
