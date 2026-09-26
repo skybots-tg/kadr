@@ -59,6 +59,16 @@ namespace Kadr.Core
                     TryDelete(f);
             File.Copy(Environment.ProcessPath!, InstalledExe, true);
 
+            Register();
+
+            AutoStart = autoStart;
+            Settings.Current.AutoStartInitialized = true;
+            Settings.Save();
+        }
+
+        /// <summary>Start menu shortcut and the "Apps &amp; features" entry for the installed exe.</summary>
+        static void Register()
+        {
             CreateShortcut(ShortcutPath, InstalledExe, "Кадр — скриншоты как на Mac");
 
             using (var k = Registry.CurrentUser.CreateSubKey(UninstallKey))
@@ -75,10 +85,6 @@ namespace Kadr.Core
                 k.SetValue("NoRepair", 1, RegistryValueKind.DWord);
                 k.SetValue("EstimatedSize", (int)(new FileInfo(InstalledExe).Length / 1024), RegistryValueKind.DWord);
             }
-
-            AutoStart = autoStart;
-            Settings.Current.AutoStartInitialized = true;
-            Settings.Save();
         }
 
         /// <summary>Start the installed copy through Explorer so it runs as a normal, independent process.</summary>
@@ -88,14 +94,17 @@ namespace Kadr.Core
             else Process.Start(new ProcessStartInfo(InstalledExe, args) { UseShellExecute = true, WorkingDirectory = InstallDir });
         }
 
-        /// <summary>Keep the "Apps &amp; features" entry in sync after an over-the-air update.</summary>
+        /// <summary>
+        /// Keep the shortcut and the "Apps &amp; features" entry present and current — after an over-the-air
+        /// update, or if something removed them.
+        /// </summary>
         public static void RefreshRegistration()
         {
             if (!IsInstalledCopy) return;
             try
             {
-                using var k = Registry.CurrentUser.OpenSubKey(UninstallKey, true);
-                if (k != null && (k.GetValue("DisplayVersion") as string) != Version) k.SetValue("DisplayVersion", Version);
+                using var k = Registry.CurrentUser.OpenSubKey(UninstallKey);
+                if (k == null || (k.GetValue("DisplayVersion") as string) != Version || !File.Exists(ShortcutPath)) Register();
             }
             catch { }
         }
