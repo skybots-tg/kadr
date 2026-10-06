@@ -51,11 +51,15 @@ namespace Kadr
 
             var args = e.Args;
             bool Has(string a) => Array.Exists(args, x => string.Equals(x, a, StringComparison.OrdinalIgnoreCase));
+            // --lang ru|en: UI language for this run only (promo images, testing); never saved
+            int li = Array.FindIndex(args, x => string.Equals(x, "--lang", StringComparison.OrdinalIgnoreCase));
+            string lang = li >= 0 && li + 1 < args.Length ? args[li + 1].ToLowerInvariant() : null;
+            if (lang != null) L.Apply(lang);
 
             if (Has("--promo") && args.Length >= 3)
             {
                 _ephemeral = true; // promo overrides must never reach the real settings file
-                try { Promo.Run(args[1], args[2]); } catch (Exception ex) { File.WriteAllText(Path.Combine(args[2], "error.txt"), ex.ToString()); }
+                try { Promo.Run(args[1], args[2], lang); } catch (Exception ex) { File.WriteAllText(Path.Combine(args[2], "error.txt"), ex.ToString()); }
                 Shutdown();
                 return;
             }
@@ -225,6 +229,15 @@ namespace Kadr
             try { _mutex?.ReleaseMutex(); _mutex?.Dispose(); _mutex = null; } catch { }
             Process.Start(new ProcessStartInfo(exe, args) { UseShellExecute = false, WorkingDirectory = Path.GetDirectoryName(exe) });
             Shutdown();
+        }
+
+        /// <summary>Settings.Language changed: tray menu, Start menu shortcut and the Apps entry follow it.</summary>
+        public void ApplyLanguage()
+        {
+            L.Apply(Settings.Current.Language);
+            _tray?.Dispose();
+            _tray = new Tray(this);
+            Installer.RefreshRegistration();
         }
 
         public void ApplyHotkeys()

@@ -37,7 +37,7 @@ namespace Kadr.Core
         public static string NewFileName()
         {
             var now = DateTime.Now;
-            return $"Снимок экрана {now:yyyy-MM-dd} в {now:HH.mm.ss}";
+            return L.En ? $"Screenshot {now:yyyy-MM-dd} at {now:HH.mm.ss}" : $"Снимок экрана {now:yyyy-MM-dd} в {now:HH.mm.ss}";
         }
 
         public static string SaveToFolder(PixelImage img, string folder = null)

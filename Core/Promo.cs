@@ -21,10 +21,11 @@ namespace Kadr.Core
     {
         const double S = 1.25;
 
-        public static void Run(string assets, string outDir)
+        public static void Run(string assets, string outDir, string lang = null)
         {
             Directory.CreateDirectory(outDir);
             Settings.Load();
+            if (lang != null) L.Apply(lang);
             Settings.Current.Folder = @"C:\Users\User\Pictures\Screenshots";
             Settings.Current.Hotkeys = Hotkeys.Defaults();
             Settings.Current.LastColor = "#FFFF3B30";
@@ -42,7 +43,7 @@ namespace Kadr.Core
             var hero = new List<Annotation>();
             hero.Add(new ShapeAnnotation { A = new Point(282, 114), B2 = new Point(619, 264), Color = red, SizeLevel = 1 });
             hero.Add(new ArrowAnnotation { Start = new Point(560, 618), End = new Point(1024, 438), Control = new Point(760, 440), Color = red, SizeLevel = 1 });
-            hero.Add(new TextAnnotation { Position = new Point(330, 626), Text = "Рост после рассылки", Color = red, SizeLevel = 1, Style = TextStyleKind.Outline });
+            hero.Add(new TextAnnotation { Position = new Point(330, 626), Text = L.T("Рост после рассылки", "Growth after the newsletter"), Color = red, SizeLevel = 1, Style = TextStyleKind.Outline });
             hero.Add(new CounterAnnotation { Center = new Point(584, 152), Number = 1, Color = red, SizeLevel = 1 });
             hero.Add(new CounterAnnotation { Center = new Point(925, 152), Number = 2, Color = red, SizeLevel = 1 });
             Save(Overlay(desk).PromoEditing(Px(264, 96, 1316, 716), hero, Tool.Arrow), outDir, "scene_hero.png");
@@ -51,7 +52,7 @@ namespace Kadr.Core
             Save(Overlay(desk).PromoSelecting(Px(640, 300, 968, 484), new Point(968, 484)), outDir, "scene_select.png");
 
             // 3. window mode hover
-            var w = new WindowInfo { Bounds = new Int32Rect(480, 220, 1600, 1000), Title = "Orbit — Задачи" };
+            var w = new WindowInfo { Bounds = new Int32Rect(480, 220, 1600, 1000), Title = L.T("Orbit — Задачи", "Orbit — Tasks") };
             Save(Overlay(winScene).PromoWindowHover(w), outDir, "scene_window.png");
 
             // 4. the resulting macOS-style window shot

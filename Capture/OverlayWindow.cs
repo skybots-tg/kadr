@@ -69,7 +69,7 @@ namespace Kadr.Capture
             Width = monitor.Bounds.Width / _s; Height = monitor.Bounds.Height / _s;
             UseLayoutRounding = false;
             FocusVisualStyle = null;
-            Title = "Кадр";
+            Title = L.AppName;
 
             var bg = new Image { Source = img.Bitmap, Stretch = Stretch.Fill };
             RenderOptions.SetBitmapScalingMode(bg, BitmapScalingMode.NearestNeighbor);
@@ -277,8 +277,8 @@ namespace Kadr.Capture
         {
             _hintRow.Children.Clear();
             var parts = _session.WindowMode
-                ? new[] { ("Клик", "снимок окна"), ("Alt", "без тени"), ("Пробел", "область"), ("Esc", "отмена") }
-                : new[] { ("Тяните", "область"), ("Клик", "окно"), ("Пробел", "снимок окна"), ("Esc", "отмена") };
+                ? new[] { (L.T("Клик", "Click"), L.T("снимок окна", "capture window")), ("Alt", L.T("без тени", "no shadow")), (L.T("Пробел", "Space"), L.T("область", "region")), ("Esc", L.T("отмена", "cancel")) }
+                : new[] { (L.T("Тяните", "Drag"), L.T("область", "region")), (L.T("Клик", "Click"), L.T("окно", "window")), (L.T("Пробел", "Space"), L.T("снимок окна", "window shot")), ("Esc", L.T("отмена", "cancel")) };
             for (int i = 0; i < parts.Length; i++)
             {
                 var (k, what) = parts[i];
@@ -370,7 +370,7 @@ namespace Kadr.Capture
                 _hoverRect.Stroke = new SolidColorBrush(Color.FromArgb(220, 10, 132, 255));
                 _hoverRect.StrokeThickness = 2;
                 _hoverRect.StrokeDashArray = null;
-                _hoverTitle.Text = string.IsNullOrEmpty(w.Title) ? "Окно" : w.Title;
+                _hoverTitle.Text = string.IsNullOrEmpty(w.Title) ? L.T("Окно", "Window") : w.Title;
                 _hoverSize.Text = $"{w.Bounds.Width} × {w.Bounds.Height}";
                 _hoverLabel.Visibility = Visibility.Visible;
                 _hoverLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));

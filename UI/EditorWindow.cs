@@ -27,7 +27,7 @@ namespace Kadr.UI
         public EditorWindow(CaptureResult r)
         {
             _r = r;
-            Title = "Кадр — редактор";
+            Title = L.T("Кадр — редактор", "Kadr — editor");
             Background = new SolidColorBrush(Color.FromRgb(24, 24, 27));
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             var img = r.Base;

@@ -33,7 +33,7 @@ namespace Kadr.UI
 
         SettingsWindow()
         {
-            Title = "Кадр — настройки";
+            Title = L.T("Кадр — настройки", "Kadr — settings");
             Width = 600; Height = 760; MinWidth = 520; MinHeight = 480;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
@@ -42,16 +42,16 @@ namespace Kadr.UI
             var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 18) };
             if (App.AppIconImage != null) head.Children.Add(new Image { Source = App.AppIconImage, Width = 44, Height = 44, Margin = new Thickness(0, 0, 14, 0) });
             var titles = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            titles.Children.Add(Text("Кадр", 22, weight: FontWeights.SemiBold));
-            titles.Children.Add(Text($"Скриншоты как на Mac · версия {Installer.Version}", 12.5, dim: true));
+            titles.Children.Add(Text(L.AppName, 22, weight: FontWeights.SemiBold));
+            titles.Children.Add(Text(L.T($"Скриншоты как на Mac · версия {Installer.Version}", $"macOS-style screenshots · version {Installer.Version}"), 12.5, dim: true));
             head.Children.Add(titles);
             root.Children.Add(head);
 
             // hotkeys
-            root.Children.Add(Section("Горячие клавиши", "Нажмите на сочетание и введите новое. Esc — отмена, Backspace — удалить."));
+            root.Children.Add(Section(L.T("Горячие клавиши", "Hotkeys"), L.T("Нажмите на сочетание и введите новое. Esc — отмена, Backspace — удалить.", "Click a shortcut and press a new one. Esc cancels, Backspace removes.")));
             root.Children.Add(Card(_hotkeyCard));
             BuildHotkeys();
-            var reset = Link("Вернуть стандартные");
+            var reset = Link(L.T("Вернуть стандартные", "Restore defaults"));
             reset.MouseLeftButtonUp += (_, _) =>
             {
                 Settings.Current.Hotkeys = Hotkeys.Defaults();
@@ -63,37 +63,38 @@ namespace Kadr.UI
 
             // after capture
             var s = Settings.Current;
-            root.Children.Add(Section("После снимка"));
+            root.Children.Add(Section(L.T("После снимка", "After capture")));
             var folderRow = FolderRow();
             root.Children.Add(Card(
-                ToggleRow("Копировать в буфер обмена", "PNG с прозрачностью — вставляется в мессенджеры и документы", s.CopyToClipboard, v => s.CopyToClipboard = v),
-                ToggleRow("Сохранять в папку", null, s.SaveToFolder, v => s.SaveToFolder = v),
+                ToggleRow(L.T("Копировать в буфер обмена", "Copy to clipboard"), L.T("PNG с прозрачностью — вставляется в мессенджеры и документы", "PNG with transparency — pastes into chats and documents"), s.CopyToClipboard, v => s.CopyToClipboard = v),
+                ToggleRow(L.T("Сохранять в папку", "Save to folder"), null, s.SaveToFolder, v => s.SaveToFolder = v),
                 folderRow,
-                ToggleRow("Показывать миниатюру", "Карточка в углу: клик — редактор, можно перетащить в чат", s.ShowThumbnail, v => s.ShowThumbnail = v),
-                ToggleRow("Звук затвора", null, s.PlaySound, v => s.PlaySound = v)));
+                ToggleRow(L.T("Показывать миниатюру", "Show thumbnail"), L.T("Карточка в углу: клик — редактор, можно перетащить в чат", "Corner card: click to edit, drag into a chat"), s.ShowThumbnail, v => s.ShowThumbnail = v),
+                ToggleRow(L.T("Звук затвора", "Shutter sound"), null, s.PlaySound, v => s.PlaySound = v)));
 
-            root.Children.Add(Section("Снимок"));
+            root.Children.Add(Section(L.T("Снимок", "Capture")));
             root.Children.Add(Card(
-                ToggleRow("Тень у снимков окон", "Мягкая тень, как на Mac. Alt+клик — без тени", s.WindowShadow, v => s.WindowShadow = v),
+                ToggleRow(L.T("Тень у снимков окон", "Window shot shadow"), L.T("Мягкая тень, как на Mac. Alt+клик — без тени", "Soft macOS-style shadow. Alt+click — no shadow"), s.WindowShadow, v => s.WindowShadow = v),
                 CornersRow(),
-                ToggleRow("Лупа при выделении", "Увеличение, координаты и цвет пикселя под курсором", s.ShowMagnifier, v => s.ShowMagnifier = v)));
+                ToggleRow(L.T("Лупа при выделении", "Magnifier while selecting"), L.T("Увеличение, координаты и цвет пикселя под курсором", "Zoom, coordinates and pixel color under the cursor"), s.ShowMagnifier, v => s.ShowMagnifier = v)));
 
-            root.Children.Add(Section("Система"));
+            root.Children.Add(Section(L.T("Система", "System")));
             var sys = new System.Collections.Generic.List<UIElement>
             {
-                ToggleRow("Запускать вместе с Windows", null, Installer.AutoStart, v => Installer.AutoStart = v),
-                ToggleRow("Обновлять автоматически", "Новые версии с GitHub ставятся сами, когда вы не делаете снимок", s.AutoUpdate, v => s.AutoUpdate = v),
+                ToggleRow(L.T("Запускать вместе с Windows", "Start with Windows"), null, Installer.AutoStart, v => Installer.AutoStart = v),
+                ToggleRow(L.T("Обновлять автоматически", "Update automatically"), L.T("Новые версии с GitHub ставятся сами, когда вы не делаете снимок", "New versions from GitHub install themselves while you are not capturing"), s.AutoUpdate, v => s.AutoUpdate = v),
                 UpdateRow(),
+                LanguageRow(),
             };
             if (Installer.IsInstalledCopy)
             {
-                var un = new PillButton("Удалить Кадр", primary: false, danger: true) { HorizontalAlignment = HorizontalAlignment.Right };
+                var un = new PillButton(L.T("Удалить Кадр", "Uninstall Kadr"), primary: false, danger: true) { HorizontalAlignment = HorizontalAlignment.Right };
                 un.Click += () => App.ConfirmUninstall(this);
-                sys.Add(Row("Удаление", "Снимки в папке останутся", un));
+                sys.Add(Row(L.T("Удаление", "Uninstall"), L.T("Снимки в папке останутся", "Your screenshots stay in the folder"), un));
             }
             root.Children.Add(Card(sys.ToArray()));
 
-            var gh = Link("Кадр на GitHub");
+            var gh = Link(L.T("Кадр на GitHub", "Kadr on GitHub"));
             gh.Margin = new Thickness(4, 16, 0, 0);
             gh.MouseLeftButtonUp += (_, _) => { try { Process.Start(new ProcessStartInfo("https://github.com/skybots-tg/kadr") { UseShellExecute = true }); } catch { } };
             root.Children.Add(gh);
@@ -167,7 +168,7 @@ namespace Kadr.UI
         {
             var status = new TextBlock { FontSize = 12, Foreground = TextDim, Margin = new Thickness(0, 2, 0, 0), TextWrapping = TextWrapping.Wrap, Visibility = Visibility.Collapsed };
             void Status(string t) { status.Text = t; status.Visibility = Visibility.Visible; }
-            var btn = new PillButton("Проверить", false);
+            var btn = new PillButton(L.T("Проверить", "Check"), false);
             bool busy = false;
             btn.Click += async () =>
             {
@@ -175,19 +176,19 @@ namespace Kadr.UI
                 busy = true;
                 try
                 {
-                    Status("Проверяю…");
+                    Status(L.T("Проверяю…", "Checking…"));
                     var r = await Updater.FetchLatestAsync();
                     Settings.Current.LastUpdateCheck = DateTime.Now;
-                    if (!Updater.IsNewer(r)) { Status("У вас последняя версия"); return; }
+                    if (!Updater.IsNewer(r)) { Status(L.T("У вас последняя версия", "You have the latest version")); return; }
                     if (!Installer.IsInstalledCopy)
                     {
-                        Status($"Доступна версия {r.Version} — откройте страницу релиза");
+                        Status(L.T($"Доступна версия {r.Version} — откройте страницу релиза", $"Version {r.Version} is available — see the release page"));
                         Process.Start(new ProcessStartInfo(r.PageUrl) { UseShellExecute = true });
                         return;
                     }
-                    var progress = new Progress<double>(p => Status($"Скачиваю {r.Version}… {Math.Round(p * 100)}%"));
+                    var progress = new Progress<double>(p => Status(L.T($"Скачиваю {r.Version}… {Math.Round(p * 100)}%", $"Downloading {r.Version}… {Math.Round(p * 100)}%")));
                     var path = await Updater.DownloadAsync(r, progress);
-                    Status("Устанавливаю и перезапускаю…");
+                    Status(L.T("Устанавливаю и перезапускаю…", "Installing and restarting…"));
                     await System.Threading.Tasks.Task.Delay(400);
                     Close();
                     App.Instance.ApplyUpdate(r, path);
@@ -195,25 +196,46 @@ namespace Kadr.UI
                 catch (Exception ex)
                 {
                     App.Log(ex);
-                    Status("Не удалось: " + ex.Message);
+                    Status(L.T("Не удалось: ", "Failed: ") + ex.Message);
                 }
                 finally { busy = false; }
             };
-            var g = Row($"Версия {Installer.Version}", null, btn);
+            var g = Row(L.T($"Версия {Installer.Version}", $"Version {Installer.Version}"), null, btn);
             ((StackPanel)g.Children[0]).Children.Add(status);
             return g;
+        }
+
+        Grid LanguageRow()
+        {
+            var seg = new Segmented(new (FrameworkElement, string)[]
+            {
+                (new TextBlock { Text = "Русский", FontSize = 12.5, Foreground = Brushes.White }, null),
+                (new TextBlock { Text = "English", FontSize = 12.5, Foreground = Brushes.White }, null),
+            }, null);
+            seg.Selected = L.En ? 1 : 0;
+            seg.Picked += i =>
+            {
+                if (i == seg.Selected) return;
+                Settings.Current.Language = i == 1 ? "en" : "ru";
+                Settings.Save();
+                App.Instance.ApplyLanguage();
+                // the window is built from strings once: reopen it in the new language
+                Close();
+                Dispatcher.BeginInvoke(ShowSingle);
+            };
+            return Row(L.T("Язык", "Language"), null, seg);
         }
 
         static Grid CornersRow()
         {
             var seg = new Segmented(new (FrameworkElement, string)[]
             {
-                (new TextBlock { Text = "Классика", FontSize = 12.5, Foreground = Brushes.White }, "Как в macOS до 26-й версии"),
-                (new TextBlock { Text = "macOS 26", FontSize = 12.5, Foreground = Brushes.White }, "Круглее, как в macOS 26"),
+                (new TextBlock { Text = L.T("Классика", "Classic"), FontSize = 12.5, Foreground = Brushes.White }, L.T("Как в macOS до 26-й версии", "As in macOS before 26")),
+                (new TextBlock { Text = "macOS 26", FontSize = 12.5, Foreground = Brushes.White }, L.T("Круглее, как в macOS 26", "Rounder, as in macOS 26")),
             }, null);
             seg.Selected = Settings.Current.WindowCorners == 0 ? 0 : 1;
             seg.Picked += i => { seg.Selected = i; Settings.Current.WindowCorners = i; Settings.Save(); };
-            return Row("Скругление углов окна", "Одинаковое для окон любого размера", seg);
+            return Row(L.T("Скругление углов окна", "Window corners"), L.T("Одинаковое для окон любого размера", "Same for windows of any size"), seg);
         }
 
         Grid FolderRow()
@@ -223,17 +245,17 @@ namespace Kadr.UI
             Refresh();
             var btns = new StackPanel { Orientation = Orientation.Horizontal };
             btns.Children.Add(path);
-            var open = new PillButton("Открыть", false) { Margin = new Thickness(0, 0, 6, 0) };
+            var open = new PillButton(L.T("Открыть", "Open"), false) { Margin = new Thickness(0, 0, 6, 0) };
             open.Click += () => { Directory.CreateDirectory(Settings.Current.Folder); Process.Start("explorer.exe", $"\"{Settings.Current.Folder}\""); };
-            var change = new PillButton("Изменить…", false);
+            var change = new PillButton(L.T("Изменить…", "Change…"), false);
             change.Click += () =>
             {
-                var dlg = new Microsoft.Win32.OpenFolderDialog { InitialDirectory = Settings.Current.Folder, Title = "Куда сохранять снимки" };
+                var dlg = new Microsoft.Win32.OpenFolderDialog { InitialDirectory = Settings.Current.Folder, Title = L.T("Куда сохранять снимки", "Where to save screenshots") };
                 if (dlg.ShowDialog(this) == true) { Settings.Current.Folder = dlg.FolderName; Settings.Save(); Refresh(); }
             };
             btns.Children.Add(open);
             btns.Children.Add(change);
-            return Row("Папка", null, btns);
+            return Row(L.T("Папка", "Folder"), null, btns);
         }
 
         // ------------------------------------------------------------------ hotkeys
@@ -243,7 +265,12 @@ namespace Kadr.UI
             _hotkeyCard.Children.Clear();
             _recordingChip = null;
             var actions = new[] { HotkeyAction.Region, HotkeyAction.Window, HotkeyAction.FullScreen };
-            string[] subs = { "Экран замирает. Пробел — режим окна", "Сразу выбор окна — снимок с тенью", "Монитор под курсором целиком" };
+            string[] subs =
+            {
+                L.T("Экран замирает. Пробел — режим окна", "The screen freezes. Space — window mode"),
+                L.T("Сразу выбор окна — снимок с тенью", "Pick a window right away — shot with shadow"),
+                L.T("Монитор под курсором целиком", "The whole monitor under the cursor"),
+            };
             for (int i = 0; i < actions.Length; i++)
             {
                 if (i > 0) _hotkeyCard.Children.Add(new Border { Height = 1, Background = Theme.Hairline, Margin = new Thickness(16, 0, 16, 0) });
@@ -260,12 +287,12 @@ namespace Kadr.UI
         {
             FrameworkElement content = binding != null
                 ? KeyCaps.Make(Hotkeys.Parts(binding.Vk, binding.Mods))
-                : new TextBlock { Text = "+ Добавить", FontSize = 12, Foreground = TextDim, Margin = new Thickness(4, 1, 4, 1) };
+                : new TextBlock { Text = L.T("+ Добавить", "+ Add"), FontSize = 12, Foreground = TextDim, Margin = new Thickness(4, 1, 4, 1) };
             var chip = new Border
             {
                 Child = content, CornerRadius = new CornerRadius(8), Padding = new Thickness(6, 5, 4, 5), Margin = new Thickness(6, 0, 0, 0),
                 Background = Brushes.Transparent, BorderBrush = binding == null ? Theme.Hairline : Brushes.Transparent, BorderThickness = new Thickness(1),
-                Cursor = Cursors.Hand, ToolTip = binding == null ? "Добавить сочетание" : "Изменить",
+                Cursor = Cursors.Hand, ToolTip = binding == null ? L.T("Добавить сочетание", "Add a shortcut") : L.T("Изменить", "Change"),
             };
             chip.MouseEnter += (_, _) => { if (chip != _recordingChip) chip.Background = Theme.Hover; };
             chip.MouseLeave += (_, _) => { if (chip != _recordingChip) chip.Background = Brushes.Transparent; };
@@ -277,7 +304,7 @@ namespace Kadr.UI
         {
             CancelRecording();
             _recordingChip = chip;
-            chip.Child = new TextBlock { Text = "Нажмите сочетание…", FontSize = 12, Foreground = Brushes.White, Margin = new Thickness(6, 1, 6, 1) };
+            chip.Child = new TextBlock { Text = L.T("Нажмите сочетание…", "Press a shortcut…"), FontSize = 12, Foreground = Brushes.White, Margin = new Thickness(6, 1, 6, 1) };
             chip.BorderBrush = new SolidColorBrush(AnnotationSurface.Accent);
             chip.Background = new SolidColorBrush(Color.FromArgb(40, 10, 132, 255));
             App.Instance.Hook.Record((vk, mods) =>

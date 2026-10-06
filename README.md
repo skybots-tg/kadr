@@ -8,8 +8,6 @@ Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a no
 
 **[⬇ Download Kadr.exe](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe)** · Windows 10/11 (x64) · free, open source, no ads, works offline
 
-> The interface is in Russian for now. Hotkeys and the table below are all you need to use it.
-
 ---
 
 ## Features
@@ -20,6 +18,7 @@ Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a no
 - **Four ways to hide things:** pixelate, blur, solid redaction box and "focus" (blur everything around the area).
 - **Floating thumbnail** after each shot: click to edit, drag the file straight into Telegram, Slack, a browser or Explorer, swipe right to dismiss.
 - **Pin to screen** (`Ctrl+P`): keep a screenshot on top of all windows; mouse wheel zooms, `Ctrl+wheel` changes opacity.
+- **English and Russian interface.** The language follows Windows and can be switched in the settings.
 - **Custom hotkeys**, autostart and save folder in the settings.
 - **Updates itself** from GitHub releases, quietly, when you are not taking a screenshot (can be turned off).
 
@@ -44,23 +43,23 @@ Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a no
 | `Enter` / `Ctrl+C` | Copy and close |
 | `Ctrl+S` · `Ctrl+P` · `Esc` | Save as… · pin · cancel |
 
-Capture hotkeys can be changed in the settings (tray icon → «Настройки…», i.e. Settings).
+Capture hotkeys can be changed in the settings (tray icon → Settings…).
 
 ## Install
 
 1. Download [`Kadr.exe`](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe) and run it.
-2. Click **«Установить»** (Install). Kadr installs for the current user only (no admin rights needed) and adds itself to the Start menu and autostart.
+2. Click **Install**. Kadr installs for the current user only (no admin rights needed) and adds itself to the Start menu and autostart.
 3. Press `PrtSc`.
 
 Windows SmartScreen may say "Windows protected your PC" because the app has no paid code-signing certificate. Click **More info → Run anyway**.
 
-Prefer a portable app? The **«Без установки»** (Run without installing) button runs Kadr straight from the downloaded file.
+Prefer a portable app? The **Run without installing** button runs Kadr straight from the downloaded file.
 
 **Uninstall:** Settings → Apps → Kadr → Uninstall (or from Kadr's own settings). Your screenshots are kept.
 
 ## Where screenshots go
 
-To the clipboard (PNG with transparency, pastes into messengers and documents) and to `Pictures\Screenshots`, named like `Снимок экрана 2026-09-26 в 14.32.10.png` (Screenshot … at …). Everything is configurable. Kadr works fully offline and sends nothing anywhere.
+To the clipboard (PNG with transparency, pastes into messengers and documents) and to `Pictures\Screenshots`, named like `Screenshot 2026-09-26 at 14.32.10.png`. Everything is configurable. Kadr works fully offline and sends nothing anywhere.
 
 ## Build from source
 

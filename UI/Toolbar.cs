@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using Kadr.Core;
 using Kadr.Editor;
 
 namespace Kadr.UI
@@ -180,16 +181,17 @@ namespace Kadr.UI
         /// <summary>Raised when the options strip appears, disappears or changes size.</summary>
         public event Action OptionsChanged;
 
-        public static readonly (Tool tool, string icon, string tip)[] ToolDefs =
+        // a property, not a field: tips follow a language switch
+        public static (Tool tool, string icon, string tip)[] ToolDefs => new[]
         {
-            (Tool.Arrow, Icons.Arrow, "Стрелка — A"),
-            (Tool.Rect, Icons.Rect, "Прямоугольник — R"),
-            (Tool.Ellipse, Icons.Ellipse, "Овал — O"),
-            (Tool.Pen, Icons.Pen, "Карандаш — P"),
-            (Tool.Marker, Icons.Marker, "Маркер — H"),
-            (Tool.Text, Icons.Text, "Текст — T"),
-            (Tool.Counter, null, "Нумерация — N"),
-            (Tool.Blur, Icons.Blur, "Размытие — B"),
+            (Tool.Arrow, Icons.Arrow, L.T("Стрелка — A", "Arrow — A")),
+            (Tool.Rect, Icons.Rect, L.T("Прямоугольник — R", "Rectangle — R")),
+            (Tool.Ellipse, Icons.Ellipse, L.T("Овал — O", "Oval — O")),
+            (Tool.Pen, Icons.Pen, L.T("Карандаш — P", "Pen — P")),
+            (Tool.Marker, Icons.Marker, L.T("Маркер — H", "Highlighter — H")),
+            (Tool.Text, Icons.Text, L.T("Текст — T", "Text — T")),
+            (Tool.Counter, null, L.T("Нумерация — N", "Counter — N")),
+            (Tool.Blur, Icons.Blur, L.T("Размытие — B", "Blur — B")),
         };
 
         public Toolbar(AnnotationSurface surface, bool showPin = true)
@@ -207,30 +209,30 @@ namespace Kadr.UI
                 bar.Children.Add(btn);
             }
             bar.Children.Add(Sep());
-            _undo = new ToolButton(Icons.Make(Icons.Undo), "Отменить — Ctrl+Z");
+            _undo = new ToolButton(Icons.Make(Icons.Undo), L.T("Отменить — Ctrl+Z", "Undo — Ctrl+Z"));
             _undo.Click += () => _s.Undo();
-            _redo = new ToolButton(Icons.Make(Icons.Redo), "Повторить — Ctrl+Y");
+            _redo = new ToolButton(Icons.Make(Icons.Redo), L.T("Повторить — Ctrl+Y", "Redo — Ctrl+Y"));
             _redo.Click += () => _s.Redo();
             bar.Children.Add(_undo);
             bar.Children.Add(_redo);
             bar.Children.Add(Sep());
             if (showPin)
             {
-                var pin = new ToolButton(Icons.Make(Icons.Pin), "Закрепить поверх окон — Ctrl+P");
+                var pin = new ToolButton(Icons.Make(Icons.Pin), L.T("Закрепить поверх окон — Ctrl+P", "Pin on top — Ctrl+P"));
                 pin.Click += () => PinClicked?.Invoke();
                 bar.Children.Add(pin);
             }
-            var save = new ToolButton(Icons.Make(Icons.Save), "Сохранить как… — Ctrl+S");
+            var save = new ToolButton(Icons.Make(Icons.Save), L.T("Сохранить как… — Ctrl+S", "Save as… — Ctrl+S"));
             save.Click += () => SaveClicked?.Invoke();
             bar.Children.Add(save);
 
             var copyContent = new StackPanel { Orientation = Orientation.Horizontal };
             copyContent.Children.Add(Icons.Make(Icons.Copy, 15, Brushes.White, 1.9));
-            copyContent.Children.Add(new TextBlock { Text = "Копировать", Foreground = Brushes.White, FontSize = 13, FontWeight = FontWeights.SemiBold, Margin = new Thickness(7, 0, 0, 1), VerticalAlignment = VerticalAlignment.Center, FontFamily = KFonts.Family });
-            var copy = new ToolButton(copyContent, "Скопировать и закрыть — Enter", 122, 32, primary: true) { Margin = new Thickness(6, 0, 2, 0) };
+            copyContent.Children.Add(new TextBlock { Text = L.T("Копировать", "Copy"), Foreground = Brushes.White, FontSize = 13, FontWeight = FontWeights.SemiBold, Margin = new Thickness(7, 0, 0, 1), VerticalAlignment = VerticalAlignment.Center, FontFamily = KFonts.Family });
+            var copy = new ToolButton(copyContent, L.T("Скопировать и закрыть — Enter", "Copy and close — Enter"), 122, 32, primary: true) { Margin = new Thickness(6, 0, 2, 0) };
             copy.Click += () => CopyClicked?.Invoke();
             bar.Children.Add(copy);
-            var close = new ToolButton(Icons.Make(Icons.Close, 16), "Отмена — Esc");
+            var close = new ToolButton(Icons.Make(Icons.Close, 16), L.T("Отмена — Esc", "Cancel — Esc"));
             close.Click += () => CloseClicked?.Invoke();
             bar.Children.Add(close);
             Main.Content.Child = bar;
@@ -268,16 +270,16 @@ namespace Kadr.UI
             {
                 _blurSeg = new Segmented(new (FrameworkElement, string)[]
                 {
-                    (Label("Пиксели"), "Мозаика"),
-                    (Label("Размытие"), "Мягкое размытие"),
-                    (Label("Закрасить"), "Сплошная плашка — надёжно скрывает"),
-                    (Label("Фокус"), "Размыть всё вокруг области"),
+                    (Label(L.T("Пиксели", "Pixelate")), L.T("Мозаика", "Mosaic")),
+                    (Label(L.T("Размытие", "Blur")), L.T("Мягкое размытие", "Soft blur")),
+                    (Label(L.T("Закрасить", "Redact")), L.T("Сплошная плашка — надёжно скрывает", "Solid box — hides reliably")),
+                    (Label(L.T("Фокус", "Focus")), L.T("Размыть всё вокруг области", "Blur everything around the area")),
                 }, i => _s.BlurKind = (BlurKind)i);
                 _optionsRow.Children.Add(_blurSeg);
                 _optionsRow.Children.Add(Sep());
                 _sizeSeg = new Segmented(new (FrameworkElement, string)[]
                 {
-                    (Dot(5), "Слабее"), (Dot(8), "Средне"), (Dot(11), "Сильнее"),
+                    (Dot(5), L.T("Слабее", "Weaker")), (Dot(8), L.T("Средне", "Medium")), (Dot(11), L.T("Сильнее", "Stronger")),
                 }, i => _s.SizeLevel = i, 28);
                 _optionsRow.Children.Add(_sizeSeg);
                 return;
@@ -289,7 +291,7 @@ namespace Kadr.UI
                 var c = AnnotationSurface.Palette[n];
                 var dot = new Ellipse { Width = 16, Height = 16, Fill = new SolidColorBrush(c), Stroke = Theme.Brush(70, 255, 255, 255), StrokeThickness = c.R + c.G + c.B < 150 ? 1 : 0 };
                 var ring = new Ellipse { Width = 24, Height = 24, StrokeThickness = 2, Stroke = Brushes.Transparent };
-                var cell = new Grid { Width = 26, Height = 30, Background = Brushes.Transparent, Cursor = Cursors.Hand, ToolTip = $"Цвет — {n + 1}" };
+                var cell = new Grid { Width = 26, Height = 30, Background = Brushes.Transparent, Cursor = Cursors.Hand, ToolTip = $"{L.T("Цвет", "Color")} — {n + 1}" };
                 cell.Children.Add(ring);
                 cell.Children.Add(dot);
                 var cc = c;
@@ -304,9 +306,9 @@ namespace Kadr.UI
 
             (FrameworkElement, string)[] sizes = kind switch
             {
-                "text" => new (FrameworkElement, string)[] { (Glyph("A", 11), "Мелкий"), (Glyph("A", 14), "Средний"), (Glyph("A", 17), "Крупный") },
-                "counter" => new (FrameworkElement, string)[] { (Dot(7), "Мелкие"), (Dot(10), "Средние"), (Dot(13), "Крупные") },
-                _ => new (FrameworkElement, string)[] { (Line(1.5), "Тонкая"), (Line(3), "Средняя"), (Line(5), "Толстая") },
+                "text" => new (FrameworkElement, string)[] { (Glyph("A", 11), L.T("Мелкий", "Small")), (Glyph("A", 14), L.T("Средний", "Medium")), (Glyph("A", 17), L.T("Крупный", "Large")) },
+                "counter" => new (FrameworkElement, string)[] { (Dot(7), L.T("Мелкие", "Small")), (Dot(10), L.T("Средние", "Medium")), (Dot(13), L.T("Крупные", "Large")) },
+                _ => new (FrameworkElement, string)[] { (Line(1.5), L.T("Тонкая", "Thin")), (Line(3), L.T("Средняя", "Medium")), (Line(5), L.T("Толстая", "Thick")) },
             };
             _sizeSeg = new Segmented(sizes, i => _s.SizeLevel = i, 30);
             _optionsRow.Children.Add(_sizeSeg);
@@ -316,9 +318,9 @@ namespace Kadr.UI
                 _optionsRow.Children.Add(Sep());
                 _textSeg = new Segmented(new (FrameworkElement, string)[]
                 {
-                    (Label("Обводка"), "Цветной текст с белым контуром"),
-                    (Label("Плашка"), "Белый текст на цветной подложке"),
-                    (Label("Простой"), "Только цвет, с лёгкой тенью"),
+                    (Label(L.T("Обводка", "Outline")), L.T("Цветной текст с белым контуром", "Colored text with a white outline")),
+                    (Label(L.T("Плашка", "Label")), L.T("Белый текст на цветной подложке", "White text on a colored background")),
+                    (Label(L.T("Простой", "Plain")), L.T("Только цвет, с лёгкой тенью", "Color only, with a soft shadow")),
                 }, i => _s.TextStyle = (TextStyleKind)i);
                 _optionsRow.Children.Add(_textSeg);
             }

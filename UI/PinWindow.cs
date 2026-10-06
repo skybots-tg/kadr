@@ -32,7 +32,7 @@ namespace Kadr.UI
             ShowInTaskbar = false;
             Topmost = true;
             SizeToContent = SizeToContent.WidthAndHeight;
-            Title = "Кадр — закреплено";
+            Title = L.T("Кадр — закреплено", "Kadr — pinned");
             if (screenRect == null) WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             _pic = new Image { Source = img.Bitmap, Stretch = Stretch.Fill };
@@ -72,11 +72,11 @@ namespace Kadr.UI
             MouseLeave += (_, _) => _frame.BorderBrush = new SolidColorBrush(Color.FromArgb(120, 10, 132, 255));
 
             var menu = new ContextMenu();
-            menu.Items.Add(Item("Копировать", () => Output.CopyToClipboard(_img)));
-            menu.Items.Add(Item("Сохранить как…", () => Output.SaveAs(_img, this)));
-            menu.Items.Add(Item("Исходный размер", () => { _zoom = 1; Opacity = 1; ApplyZoom(); }));
+            menu.Items.Add(Item(L.T("Копировать", "Copy"), () => Output.CopyToClipboard(_img)));
+            menu.Items.Add(Item(L.T("Сохранить как…", "Save as…"), () => Output.SaveAs(_img, this)));
+            menu.Items.Add(Item(L.T("Исходный размер", "Actual size"), () => { _zoom = 1; Opacity = 1; ApplyZoom(); }));
             menu.Items.Add(new Separator());
-            menu.Items.Add(Item("Закрыть", Close));
+            menu.Items.Add(Item(L.T("Закрыть", "Close"), Close));
             ContextMenu = menu;
         }
 

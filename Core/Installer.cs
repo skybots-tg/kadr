@@ -18,7 +18,9 @@ namespace Kadr.Core
 
         public static string InstallDir => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Kadr");
         public static string InstalledExe => Path.Combine(InstallDir, "Kadr.exe");
-        static string ShortcutPath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "Кадр.lnk");
+        static string ShortcutPath => ShortcutFor(L.AppName);
+        static string ShortcutFor(string name) => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), name + ".lnk");
+        static readonly string[] AllShortcutNames = { "Кадр", "Kadr" };
 
         public static string Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "1.0.0";
 
@@ -69,11 +71,13 @@ namespace Kadr.Core
         /// <summary>Start menu shortcut and the "Apps &amp; features" entry for the installed exe.</summary>
         static void Register()
         {
-            CreateShortcut(ShortcutPath, InstalledExe, "Кадр — скриншоты как на Mac");
+            // the shortcut is named in the UI language: drop the one left from the other language
+            foreach (var n in AllShortcutNames) if (n != L.AppName) TryDelete(ShortcutFor(n));
+            CreateShortcut(ShortcutPath, InstalledExe, L.T("Кадр — скриншоты как на Mac", "Kadr — macOS-style screenshots"));
 
             using (var k = Registry.CurrentUser.CreateSubKey(UninstallKey))
             {
-                k.SetValue("DisplayName", "Кадр");
+                k.SetValue("DisplayName", L.AppName);
                 k.SetValue("DisplayVersion", Version);
                 k.SetValue("Publisher", "Kadr");
                 k.SetValue("DisplayIcon", $"\"{InstalledExe}\",0");
@@ -104,7 +108,7 @@ namespace Kadr.Core
             try
             {
                 using var k = Registry.CurrentUser.OpenSubKey(UninstallKey);
-                if (k == null || (k.GetValue("DisplayVersion") as string) != Version || !File.Exists(ShortcutPath)) Register();
+                if (k == null || (k.GetValue("DisplayVersion") as string) != Version || (k.GetValue("DisplayName") as string) != L.AppName || !File.Exists(ShortcutPath)) Register();
             }
             catch { }
         }
@@ -115,7 +119,7 @@ namespace Kadr.Core
         {
             StopOtherInstances();
             AutoStart = false;
-            TryDelete(ShortcutPath);
+            foreach (var n in AllShortcutNames) TryDelete(ShortcutFor(n));
             try { Registry.CurrentUser.DeleteSubKeyTree(UninstallKey, false); } catch { }
             try { Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Kadr"), true); } catch { }
             // the running exe can't delete itself: let cmd remove the folder once we've exited

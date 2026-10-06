@@ -21,8 +21,8 @@ namespace Kadr.UI
             var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 12) };
             if (App.AppIconImage != null) head.Children.Add(new Image { Source = App.AppIconImage, Width = 30, Height = 30, Margin = new Thickness(0, 0, 10, 0) });
             var titles = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            titles.Children.Add(new TextBlock { Text = "Кадр работает", Foreground = Brushes.White, FontSize = 15, FontWeight = FontWeights.SemiBold, FontFamily = KFonts.Family });
-            titles.Children.Add(new TextBlock { Text = "Живёт в трее · сочетания меняются в настройках", Foreground = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)), FontSize = 11.5, FontFamily = KFonts.Family });
+            titles.Children.Add(new TextBlock { Text = L.T("Кадр работает", "Kadr is running"), Foreground = Brushes.White, FontSize = 15, FontWeight = FontWeights.SemiBold, FontFamily = KFonts.Family });
+            titles.Children.Add(new TextBlock { Text = L.T("Живёт в трее · сочетания меняются в настройках", "Lives in the tray · hotkeys can be changed in the settings"), Foreground = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)), FontSize = 11.5, FontFamily = KFonts.Family });
             head.Children.Add(titles);
             stack.Children.Add(head);
 
@@ -42,11 +42,11 @@ namespace Kadr.UI
                 g.Children.Add(k); g.Children.Add(t);
                 stack.Children.Add(g);
             }
-            Row(Hotkeys.FirstFor(HotkeyAction.Region) ?? "—", "Снимок области");
-            Row("Пробел", "Режим окна (с тенью)");
-            Row(Hotkeys.FirstFor(HotkeyAction.FullScreen) ?? "—", "Весь экран");
-            Row("A T B", "Стрелка, текст, размытие…");
-            Row("Enter", "Скопировать и закрыть");
+            Row(Hotkeys.FirstFor(HotkeyAction.Region) ?? "—", L.T("Снимок области", "Capture region"));
+            Row(L.T("Пробел", "Space"), L.T("Режим окна (с тенью)", "Window mode (with shadow)"));
+            Row(Hotkeys.FirstFor(HotkeyAction.FullScreen) ?? "—", L.T("Весь экран", "Full screen"));
+            Row("A T B", L.T("Стрелка, текст, размытие…", "Arrow, text, blur…"));
+            Row("Enter", L.T("Скопировать и закрыть", "Copy and close"));
             Present(stack, 9);
         }
 
@@ -57,8 +57,8 @@ namespace Kadr.UI
             var head = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 8) };
             if (App.AppIconImage != null) head.Children.Add(new Image { Source = App.AppIconImage, Width = 30, Height = 30, Margin = new Thickness(0, 0, 10, 0) });
             var titles = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-            titles.Children.Add(new TextBlock { Text = $"Кадр обновлён до {version}", Foreground = Brushes.White, FontSize = 15, FontWeight = FontWeights.SemiBold, FontFamily = KFonts.Family });
-            titles.Children.Add(new TextBlock { Text = "Обновление установилось автоматически", Foreground = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)), FontSize = 11.5, FontFamily = KFonts.Family });
+            titles.Children.Add(new TextBlock { Text = L.T($"Кадр обновлён до {version}", $"Kadr updated to {version}"), Foreground = Brushes.White, FontSize = 15, FontWeight = FontWeights.SemiBold, FontFamily = KFonts.Family });
+            titles.Children.Add(new TextBlock { Text = L.T("Обновление установилось автоматически", "The update was installed automatically"), Foreground = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)), FontSize = 11.5, FontFamily = KFonts.Family });
             head.Children.Add(titles);
             stack.Children.Add(head);
             foreach (var line in (notes ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries))

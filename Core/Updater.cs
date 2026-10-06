@@ -71,7 +71,7 @@ namespace Kadr.Core
         {
             var uri = new Uri(r.DownloadUrl);
             if (uri.Scheme != "https" || !uri.Host.EndsWith("github.com", StringComparison.OrdinalIgnoreCase))
-                throw new InvalidOperationException("Неожиданный адрес загрузки");
+                throw new InvalidOperationException(L.T("Неожиданный адрес загрузки", "Unexpected download address"));
 
             Directory.CreateDirectory(DownloadDir);
             string path = Path.Combine(DownloadDir, $"Kadr-{r.Version}.exe");
@@ -97,7 +97,7 @@ namespace Kadr.Core
             if (!Verify(path, r))
             {
                 TryDelete(path);
-                throw new InvalidDataException("Файл обновления повреждён — контрольная сумма не совпала");
+                throw new InvalidDataException(L.T("Файл обновления повреждён — контрольная сумма не совпала", "The update file is corrupted — checksum mismatch"));
             }
             return path;
         }
@@ -140,9 +140,14 @@ namespace Kadr.Core
         }
 
         /// <summary>First lines of the release notes as plain text, for the "updated" card.</summary>
+        /// Bilingual notes: the English part follows a heading that contains "English"; a release without it
+        /// shows no lines to English users rather than Russian ones.
         public static string Summary(string notes, int maxLines = 3)
         {
-            var lines = (notes ?? "").Replace("\r", "").Split('\n')
+            var all = (notes ?? "").Replace("\r", "").Split('\n');
+            int en = Array.FindIndex(all, l => l.TrimStart().StartsWith("#") && l.Contains("English", StringComparison.OrdinalIgnoreCase));
+            var part = L.En ? (en < 0 ? Array.Empty<string>() : all.Skip(en + 1)) : (en < 0 ? all : all.Take(en));
+            var lines = part
                 .Select(l => l.Trim())
                 .Where(l => l.StartsWith("- ") || l.StartsWith("* "))
                 .Select(l => l.Substring(2).Replace("**", "").Replace("`", ""))

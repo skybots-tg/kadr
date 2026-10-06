@@ -25,21 +25,21 @@ namespace Kadr.UI
             catch { ico = SystemIcons.Application; }
 
             var menu = new ContextMenuStrip { Renderer = new DarkRenderer(), ShowImageMargin = false, ShowCheckMargin = false, Font = new Font("Segoe UI", 9.5f), Padding = new Padding(2, 4, 2, 4) };
-            var region = Item("Снимок области", () => _app.StartCapture(false));
-            var window = Item("Снимок окна", () => _app.StartCapture(true));
-            var full = Item("Весь экран", _app.CaptureFullScreen);
+            var region = Item(L.T("Снимок области", "Capture region"), () => _app.StartCapture(false));
+            var window = Item(L.T("Снимок окна", "Capture window"), () => _app.StartCapture(true));
+            var full = Item(L.T("Весь экран", "Full screen"), _app.CaptureFullScreen);
             menu.Items.Add(region);
             menu.Items.Add(window);
             menu.Items.Add(full);
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(Item("Открыть папку со снимками", () =>
+            menu.Items.Add(Item(L.T("Открыть папку со снимками", "Open screenshots folder"), () =>
             {
                 Directory.CreateDirectory(Settings.Current.Folder);
                 Process.Start("explorer.exe", $"\"{Settings.Current.Folder}\"");
             }));
-            menu.Items.Add(Item("Настройки…", SettingsWindow.ShowSingle));
+            menu.Items.Add(Item(L.T("Настройки…", "Settings…"), SettingsWindow.ShowSingle));
             menu.Items.Add(new ToolStripSeparator());
-            menu.Items.Add(Item("Выход", () => System.Windows.Application.Current.Shutdown()));
+            menu.Items.Add(Item(L.T("Выход", "Quit"), () => System.Windows.Application.Current.Shutdown()));
             menu.Opening += (_, _) =>
             {
                 SetKeys(region, HotkeyAction.Region);
@@ -47,7 +47,7 @@ namespace Kadr.UI
                 SetKeys(full, HotkeyAction.FullScreen);
             };
 
-            _icon = new NotifyIcon { Icon = ico, Text = "Кадр — скриншоты", Visible = true, ContextMenuStrip = menu };
+            _icon = new NotifyIcon { Icon = ico, Text = L.T("Кадр — скриншоты", "Kadr — screenshots"), Visible = true, ContextMenuStrip = menu };
             _icon.MouseClick += (_, e) => { if (e.Button == MouseButtons.Left) _app.Dispatcher.BeginInvoke(() => _app.StartCapture(false)); };
         }
 

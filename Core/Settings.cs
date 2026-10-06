@@ -18,6 +18,8 @@ namespace Kadr.Core
         public bool ShowMagnifier { get; set; } = true;
         public bool FirstRunDone { get; set; }
         public bool AutoUpdate { get; set; } = true;
+        /// <summary>null — follow Windows, "ru" or "en".</summary>
+        public string Language { get; set; }
         public DateTime LastUpdateCheck { get; set; }
         public string UpdateNotes { get; set; }
 
@@ -47,6 +49,7 @@ namespace Kadr.Core
             catch { Current = new Settings(); }
             if (string.IsNullOrWhiteSpace(Current.Folder)) Current.Folder = DefaultFolder();
             Kadr.Core.Hotkeys.Normalize(Current);
+            L.Apply(Current.Language);
         }
 
         public static void Save()

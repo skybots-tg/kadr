@@ -40,7 +40,7 @@ namespace Kadr.UI
             Topmost = true;
             ShowActivated = false;
             SizeToContent = SizeToContent.WidthAndHeight;
-            Title = "Кадр — миниатюра";
+            Title = L.T("Кадр — миниатюра", "Kadr — thumbnail");
 
             var img = r.Image;
             double iw = img.Width / img.Scale, ih = img.Height / img.Scale;
@@ -67,12 +67,12 @@ namespace Kadr.UI
             _hoverLayer = new Grid { Opacity = 0, IsHitTestVisible = true };
             _hoverLayer.Children.Add(new Border { CornerRadius = new CornerRadius(10), Background = new SolidColorBrush(Color.FromArgb(r.IsWindow ? (byte)0 : (byte)70, 0, 0, 0)) });
             var center = new StackPanel { Orientation = Orientation.Vertical, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center };
-            center.Children.Add(Chip("Изменить", Icons.Edit, () => OpenEditor()));
-            center.Children.Add(Chip("Копировать", Icons.Copy, () => { Output.CopyToClipboard(_r.Image); Flash("Скопировано"); }));
+            center.Children.Add(Chip(L.T("Изменить", "Edit"), Icons.Edit, () => OpenEditor()));
+            center.Children.Add(Chip(L.T("Копировать", "Copy"), Icons.Copy, () => { Output.CopyToClipboard(_r.Image); Flash(L.T("Скопировано", "Copied")); }));
             _hoverLayer.Children.Add(center);
-            _hoverLayer.Children.Add(Round(Icons.Close, HorizontalAlignment.Left, VerticalAlignment.Top, "Закрыть", () => Dismiss(true)));
-            _hoverLayer.Children.Add(Round(Icons.Pin, HorizontalAlignment.Right, VerticalAlignment.Top, "Закрепить", () => { App.PinImage(_r.Image, null); Dismiss(false); }));
-            _hoverLayer.Children.Add(Round(Icons.Folder, HorizontalAlignment.Right, VerticalAlignment.Bottom, "Показать в папке", () => { App.RevealInExplorer(EnsureFile()); Dismiss(false); }));
+            _hoverLayer.Children.Add(Round(Icons.Close, HorizontalAlignment.Left, VerticalAlignment.Top, L.T("Закрыть", "Close"), () => Dismiss(true)));
+            _hoverLayer.Children.Add(Round(Icons.Pin, HorizontalAlignment.Right, VerticalAlignment.Top, L.T("Закрепить", "Pin"), () => { App.PinImage(_r.Image, null); Dismiss(false); }));
+            _hoverLayer.Children.Add(Round(Icons.Folder, HorizontalAlignment.Right, VerticalAlignment.Bottom, L.T("Показать в папке", "Show in folder"), () => { App.RevealInExplorer(EnsureFile()); Dismiss(false); }));
             _card.Children.Add(_hoverLayer);
 
             Content = new Border { Padding = new Thickness(Pad), Child = _card, Background = Brushes.Transparent };

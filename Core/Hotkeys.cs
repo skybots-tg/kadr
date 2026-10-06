@@ -33,9 +33,9 @@ namespace Kadr.Core
 
         public static string Title(HotkeyAction a) => a switch
         {
-            HotkeyAction.Region => "Снимок области",
-            HotkeyAction.Window => "Снимок окна",
-            _ => "Весь экран",
+            HotkeyAction.Region => L.T("Снимок области", "Capture region"),
+            HotkeyAction.Window => L.T("Снимок окна", "Capture window"),
+            _ => L.T("Весь экран", "Full screen"),
         };
 
         public static bool IsModifier(int vk) => vk is 0x10 or 0x11 or 0x12 or 0xA0 or 0xA1 or 0xA2 or 0xA3 or 0xA4 or 0xA5 or 0x5B or 0x5C;
@@ -43,7 +43,7 @@ namespace Kadr.Core
         static readonly Dictionary<int, string> Names = new()
         {
             [0x2C] = "PrtSc", [0x13] = "Pause", [0x91] = "Scroll Lock", [0x2D] = "Insert", [0x2E] = "Delete",
-            [0x24] = "Home", [0x23] = "End", [0x21] = "PgUp", [0x22] = "PgDn", [0x20] = "Пробел", [0x09] = "Tab",
+            [0x24] = "Home", [0x23] = "End", [0x21] = "PgUp", [0x22] = "PgDn", [0x09] = "Tab",
             [0x0D] = "Enter", [0x08] = "Backspace", [0x1B] = "Esc", [0x25] = "←", [0x26] = "↑", [0x27] = "→", [0x28] = "↓",
             [0xC0] = "`", [0xBD] = "-", [0xBB] = "=", [0xDB] = "[", [0xDD] = "]", [0xDC] = "\\", [0xBA] = ";", [0xDE] = "'",
             [0xBC] = ",", [0xBE] = ".", [0xBF] = "/", [0x6A] = "Num *", [0x6B] = "Num +", [0x6D] = "Num -", [0x6F] = "Num /",
@@ -51,6 +51,7 @@ namespace Kadr.Core
 
         public static string KeyName(int vk)
         {
+            if (vk == 0x20) return L.T("Пробел", "Space");
             if (Names.TryGetValue(vk, out var n)) return n;
             if (vk is >= 0x30 and <= 0x39 or >= 0x41 and <= 0x5A) return ((char)vk).ToString();
             if (vk is >= 0x70 and <= 0x87) return "F" + (vk - 0x6F);
