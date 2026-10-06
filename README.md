@@ -2,7 +2,7 @@
 
 **English** · [Русский](README.ru.md)
 
-![Kadr](docs/hero.png)
+![Kadr](docs/en/hero.png)
 
 Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a note, press **Enter**, and the image is already on your clipboard. No separate editor window, no extra clicks. If you miss `Cmd+Shift+4` from macOS, this is it for Windows.
 
@@ -22,13 +22,13 @@ Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a no
 - **Custom hotkeys**, autostart and save folder in the settings.
 - **Updates itself** from GitHub releases, quietly, when you are not taking a screenshot (can be turned off).
 
-![Window screenshot with shadow](docs/window.png)
+![Window screenshot with shadow](docs/en/window.png)
 
-![Blur and redaction](docs/blur.png)
+![Blur and redaction](docs/en/blur.png)
 
-![Region selection with loupe](docs/select.png)
+![Region selection with loupe](docs/en/select.png)
 
-![Settings](docs/settings.png)
+![Settings](docs/en/settings.png)
 
 ## Hotkeys
 

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { width: 2048px; height: 1152px; overflow: hidden; background: #f4f5f9; font-family: "Segoe UI Variable Text", "Segoe UI", sans-serif; color: #1d1d27; position: relative; }
+  .abs { position: absolute; }
+  .side { left: 0; top: 0; width: 240px; height: 1152px; background: #fff; border-right: 1px solid #e7e8ef; padding: 26px 18px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 20px "Segoe UI Variable Display", "Segoe UI"; margin: 0 0 30px 8px; }
+  .logo { width: 30px; height: 30px; border-radius: 9px; background: linear-gradient(135deg, #6a5cff, #b146ff); }
+  .nav div { padding: 11px 14px; border-radius: 10px; font-size: 15px; color: #5a5c6e; margin-bottom: 4px; display: flex; gap: 12px; align-items: center; }
+  .nav div i { width: 18px; height: 18px; border-radius: 5px; background: #d9dbe6; display: inline-block; }
+  .nav .on { background: #f0eeff; color: #4b3df0; font-weight: 600; }
+  .nav .on i { background: #6a5cff; }
+  .top { left: 240px; top: 0; width: 1808px; height: 76px; display: flex; align-items: center; padding: 0 52px; justify-content: space-between; }
+  .top h1 { font: 700 26px "Segoe UI Variable Display", "Segoe UI"; }
+  .top h1 span { color: #8a8c9c; font-weight: 500; }
+  .search { width: 360px; height: 40px; border-radius: 12px; background: #fff; border: 1px solid #e3e4ec; color: #9a9cab; font-size: 14px; display: flex; align-items: center; padding: 0 16px; }
+  .me { display: flex; align-items: center; gap: 12px; font-size: 14px; color: #5a5c6e; }
+  .av { border-radius: 50%; display: inline-block; flex: none; }
+  .card { background: #fff; border-radius: 18px; border: 1px solid #e7e8ef; box-shadow: 0 1px 2px rgba(20,20,40,.04); }
+  .kpi { top: 124px; height: 130px; width: 317px; padding: 20px 22px; }
+  .kpi .l { font-size: 14px; color: #7a7c8c; }
+  .kpi .v { font: 700 34px "Segoe UI Variable Display", "Segoe UI"; margin-top: 10px; letter-spacing: -.5px; }
+  .kpi .d { font-size: 14px; margin-top: 6px; font-weight: 600; }
+  .up { color: #16a36a; } .down { color: #e5484d; }
+  .chart { left: 292px; top: 286px; width: 1000px; height: 414px; padding: 22px 26px; }
+  .chart h2, .team h2, .goal h2, .table h2 { font: 600 17px "Segoe UI Variable Display", "Segoe UI"; }
+  .chart .sub { font-size: 13px; color: #8a8c9c; margin-top: 3px; }
+  .goal { left: 1332px; top: 124px; width: 456px; height: 130px; padding: 20px 22px; }
+  .bar { height: 10px; border-radius: 5px; background: #eceef5; margin-top: 18px; overflow: hidden; }
+  .bar b { display: block; height: 100%; width: 72%; border-radius: 5px; background: linear-gradient(90deg, #6a5cff, #b146ff); }
+  .goal .meta { display: flex; justify-content: space-between; font-size: 13px; color: #7a7c8c; margin-top: 10px; }
+  .team { left: 1332px; top: 286px; width: 456px; height: 404px; padding: 22px 24px; }
+  .row { position: absolute; left: 24px; right: 24px; height: 60px; display: flex; align-items: center; gap: 14px; }
+  .row .n { font-size: 15px; font-weight: 600; }
+  .row .e { font-size: 14px; color: #7a7c8c; margin-top: 2px; }
+  .row .tag { margin-left: auto; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+  .table { left: 292px; top: 730px; width: 1496px; height: 380px; padding: 22px 26px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 14px; }
+  th { text-align: left; color: #8a8c9c; font-weight: 500; padding: 10px 0; border-bottom: 1px solid #eceef5; }
+  td { padding: 15px 0; border-bottom: 1px solid #f1f2f7; }
+  .pill { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
+  .ok { background: #e3f7ee; color: #12905c; } .wait { background: #fff4df; color: #b7791f; } .new { background: #ecebff; color: #4b3df0; }
+</style>
+</head>
+<body>
+  <div class="abs side">
+    <div class="brand"><span class="logo"></span>Orbit</div>
+    <div class="nav">
+      <div class="on"><i></i>Overview</div><div><i></i>Sales</div><div><i></i>Customers</div><div><i></i>Newsletters</div>
+      <div><i></i>Tasks</div><div><i></i>Reports</div><div><i></i>Settings</div>
+    </div>
+  </div>
+  <div class="abs top">
+    <h1>Overview <span>· September</span></h1>
+    <div class="search">Search orders and customers</div>
+    <div class="me"><span class="av" style="width:36px;height:36px;background:linear-gradient(135deg,#ffb86b,#ff6b8b)"></span>Emily K.</div>
+  </div>
+
+  <div class="abs card kpi" style="left:292px"><div class="l">Revenue</div><div class="v">$4.82M</div><div class="d up">+38% vs August</div></div>
+  <div class="abs card kpi" style="left:633px"><div class="l">New customers</div><div class="v">1,294</div><div class="d up">+12%</div></div>
+  <div class="abs card kpi" style="left:974px"><div class="l">Conversion</div><div class="v">3.9%</div><div class="d down">−0.4 pp</div></div>
+
+  <div class="abs card goal">
+    <h2>Monthly goal</h2>
+    <div class="bar"><b></b></div>
+    <div class="meta"><span>$3.47M of $4.8M</span><span>72%</span></div>
+  </div>
+
+  <div class="abs card chart">
+    <h2>Weekly revenue</h2>
+    <div class="sub">$M · 2025</div>
+    <svg width="948" height="330" viewBox="0 0 948 330" style="margin-top:10px">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5cff" stop-opacity=".28"/><stop offset="1" stop-color="#6a5cff" stop-opacity="0"/></linearGradient>
+      </defs>
+      <g stroke="#eef0f6" stroke-width="1">
+        <line x1="40" y1="30" x2="948" y2="30"/><line x1="40" y1="100" x2="948" y2="100"/><line x1="40" y1="170" x2="948" y2="170"/><line x1="40" y1="240" x2="948" y2="240"/><line x1="40" y1="300" x2="948" y2="300"/>
+      </g>
+      <g fill="#9a9cab" font-size="12" font-family="Segoe UI"><text x="0" y="34">1.6</text><text x="0" y="104">1.2</text><text x="0" y="174">0.8</text><text x="0" y="244">0.4</text></g>
+      <path d="M40 250 C 110 240, 150 226, 210 230 S 320 212, 380 216 S 480 204, 540 200 S 620 150, 680 92 S 760 110, 820 120 S 900 112, 948 104 L 948 300 L 40 300 Z" fill="url(#g)"/>
+      <path d="M40 250 C 110 240, 150 226, 210 230 S 320 212, 380 216 S 480 204, 540 200 S 620 150, 680 92 S 760 110, 820 120 S 900 112, 948 104" fill="none" stroke="#6a5cff" stroke-width="3"/>
+      <circle cx="680" cy="92" r="6" fill="#fff" stroke="#6a5cff" stroke-width="3"/>
+      <g fill="#9a9cab" font-size="12" font-family="Segoe UI"><text x="60" y="322">Week 1</text><text x="230" y="322">Week 2</text><text x="400" y="322">Week 3</text><text x="570" y="322">Week 4</text><text x="740" y="322">Week 5</text></g>
+    </svg>
+  </div>
+
+  <div class="abs card team">
+    <h2>Team</h2>
+    <div class="row" style="top:80px"><span class="av" style="width:44px;height:44px;background:linear-gradient(135deg,#7dd3fc,#6366f1)"></span><div><div class="n">Anna Mitchell</div><div class="e">anna.mitchell@orbit.app</div></div><span class="tag ok">online</span></div>
+    <div class="row" style="top:156px"><span class="av" style="width:44px;height:44px;background:linear-gradient(135deg,#fca5a5,#f43f5e)"></span><div><div class="n">Ethan Parker</div><div class="e">ethan.parker@orbit.app</div></div><span class="tag wait">meeting</span></div>
+    <div class="row" style="top:232px"><span class="av" style="width:44px;height:44px;background:linear-gradient(135deg,#86efac,#10b981)"></span><div><div class="n">Olivia Hayes</div><div class="e">olivia.hayes@orbit.app</div></div><span class="tag ok">online</span></div>
+    <div class="row" style="top:308px"><span class="av" style="width:44px;height:44px;background:linear-gradient(135deg,#fde68a,#f59e0b)"></span><div><div class="n">David Brooks</div><div class="e">david.brooks@orbit.app</div></div><span class="tag new">on leave</span></div>
+  </div>
+
+  <div class="abs card table">
+    <h2>Recent orders</h2>
+    <table>
+      <tr><th style="width:18%">Order</th><th style="width:28%">Customer</th><th style="width:20%">Date</th><th style="width:18%">Amount</th><th>Status</th></tr>
+      <tr><td>#10482</td><td>North Wind Trading LLC</td><td>Sep 24</td><td>$128,400</td><td><span class="pill ok">Paid</span></td></tr>
+      <tr><td>#10481</td><td>Grain Coffee House</td><td>Sep 24</td><td>$36,900</td><td><span class="pill wait">Pending</span></td></tr>
+      <tr><td>#10480</td><td>Line Design Studio</td><td>Sep 23</td><td>$74,250</td><td><span class="pill new">New</span></td></tr>
+      <tr><td>#10479</td><td>Swanson &amp; Co.</td><td>Sep 23</td><td>$12,800</td><td><span class="pill ok">Paid</span></td></tr>
+    </table>
+  </div>
+</body>
+</html>
