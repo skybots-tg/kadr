@@ -141,8 +141,12 @@ namespace Kadr.Capture
                 if (pid == myPid) return true;
                 long ex = GetExStyle(h);
                 if ((ex & WS_EX_TRANSPARENT) != 0) return true;
-                if ((ex & WS_EX_LAYERED) != 0 && GetLayeredWindowAttributes(h, out _, out byte alpha, out uint flags)
-                    && (flags & 2) != 0 && alpha < 10) return true;
+                bool perPixelAlpha = false;
+                if ((ex & WS_EX_LAYERED) != 0)
+                {
+                    if (GetLayeredWindowAttributes(h, out _, out byte alpha, out uint flags)) { if ((flags & 2) != 0 && alpha < 10) return true; }
+                    else perPixelAlpha = true;   // UpdateLayeredWindow: the window supplies its own alpha
+                }
                 string cls = GetClass(h);
                 if (SkipClasses.Contains(cls)) return true;
                 string title = GetTitle(h);
@@ -150,6 +154,7 @@ namespace Kadr.Capture
                 if (rc.Width < 24 || rc.Height < 24) return true;
                 if (title.Length == 0 && !UntitledAllowed.Contains(cls)) return true;
                 if (title.Length == 0 && cls.StartsWith("Chrome_WidgetWin") && (rc.Width < 60 || rc.Height < 40)) return true;
+                if (perPixelAlpha) rc = TrimShadowMargin(h, rc);
                 list.Add(new WindowInfo
                 {
                     Handle = h,
@@ -162,6 +167,31 @@ namespace Kadr.Capture
                 return true;
             }, IntPtr.Zero);
             return list;
+        }
+
+        /// <summary>
+        /// Frameless windows with per-pixel alpha (Telegram mini apps and the like) paint their own shadow into a
+        /// transparent margin that still counts as the window, so the desktop would show through the shot. Rendered
+        /// on its own that margin comes out pure black (the shadow is black, premultiplied): peel off all-black edge
+        /// lines, but only when every side has them — otherwise it is black content, not a shadow.
+        /// </summary>
+        static RECT TrimShadowMargin(IntPtr hwnd, RECT rc)
+        {
+            var img = PrintWindowImage(hwnd, new Int32Rect(rc.Left, rc.Top, rc.Width, rc.Height));
+            if (img == null || img.Width != rc.Width || img.Height != rc.Height) return rc;
+            int w = img.Width, h = img.Height, cap = Math.Min(w, h) / 8;
+            var p = img.Pixels;
+            bool Black(int x, int y) { int i = (y * w + x) * 4; return (p[i] | p[i + 1] | p[i + 2]) == 0; }
+            bool RowBlack(int y) { for (int x = 0; x < w; x++) if (!Black(x, y)) return false; return true; }
+            bool ColBlack(int x, int y0, int y1) { for (int y = y0; y < y1; y++) if (!Black(x, y)) return false; return true; }
+
+            int top = 0, bottom = 0, left = 0, right = 0;
+            while (top < cap && RowBlack(top)) top++;
+            while (bottom < cap && RowBlack(h - 1 - bottom)) bottom++;
+            while (left < cap && ColBlack(left, top, h - bottom)) left++;
+            while (right < cap && ColBlack(w - 1 - right, top, h - bottom)) right++;
+            if (top == 0 || bottom == 0 || left == 0 || right == 0) return rc;
+            return new RECT { Left = rc.Left + left, Top = rc.Top + top, Right = rc.Right - right, Bottom = rc.Bottom - bottom };
         }
 
         static bool Intersects(Int32Rect a, Int32Rect b) =>
