@@ -1,74 +1,78 @@
-# Кадр — скриншоты как на Mac, для Windows
+# Kadr — macOS-style screenshots for Windows
 
-![Кадр](docs/hero.png)
+**English** · [Русский](README.ru.md)
 
-Нажали **PrtSc** — экран замер. Выделили область, поставили стрелку, написали текст, нажали **Enter** — картинка уже в буфере обмена. Без отдельных окон редактора и без лишних кликов.
+![Kadr](docs/hero.png)
 
-**[⬇ Скачать Кадр.exe](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe)** · Windows 10/11 (x64) · бесплатно и без рекламы
+Press **PrtSc** and the screen freezes. Select an area, draw an arrow, type a note, press **Enter**, and the image is already on your clipboard. No separate editor window, no extra clicks. If you miss `Cmd+Shift+4` from macOS, this is it for Windows.
+
+**[⬇ Download Kadr.exe](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe)** · Windows 10/11 (x64) · free, open source, no ads, works offline
+
+> The interface is in Russian for now. Hotkeys and the table below are all you need to use it.
 
 ---
 
-## Что умеет
+## Features
 
-- **Снимок области** — экран «замораживается», у курсора лупа с сеткой пикселей, координатами и цветом. `Shift` — квадрат, `Alt` — от центра, `Пробел` во время выделения двигает рамку, стрелки — сдвиг на пиксель. Клик без протягивания выделяет окно под курсором.
-- **Снимок окна как на Mac** — нажмите `Пробел`, наведите на окно и кликните: скруглённые углы, мягкая тень и прозрачный фон. `Alt+клик` — без тени.
-- **Разметка прямо на месте** — стрелки (тяните среднюю точку, чтобы изогнуть), прямоугольники, овалы, карандаш, маркер, текст в трёх стилях, нумерация шагов. Любую пометку можно выделить, передвинуть, поменять цвет. `Ctrl+Z` / `Ctrl+Y`.
-- **Четыре вида размытия** — пиксели, мягкое размытие, сплошная плашка и «фокус» (размыть всё вокруг).
-- **Миниатюра в углу** после снимка: клик — редактор, можно перетащить файл прямо в Telegram, браузер или проводник, смахнуть вправо — убрать.
-- **Закрепить поверх окон** (`Ctrl+P`) — снимок висит над всеми окнами; колесо — масштаб, `Ctrl+колесо` — прозрачность.
-- **Свои горячие клавиши**, автозапуск, выбор папки — в настройках.
-- **Обновляется сам** — новые версии с GitHub ставятся тихо, когда вы не делаете снимок (можно отключить или проверить вручную в настройках).
+- **Region capture on a frozen screen** with a magnifier loupe that shows the pixel grid, coordinates and color. `Shift` locks a square, `Alt` draws from the center, `Space` while selecting moves the frame, arrow keys nudge by one pixel. A click without dragging selects the window under the cursor.
+- **macOS-style window screenshots.** Press `Space`, hover a window and click: rounded corners, soft drop shadow, transparent background. `Alt+click` captures without the shadow.
+- **Annotate in place:** arrows (drag the midpoint to curve them), rectangles, ellipses, pen, highlighter, text in three styles, numbered step counters. Every mark can be selected, moved and recolored. `Ctrl+Z` / `Ctrl+Y`.
+- **Four ways to hide things:** pixelate, blur, solid redaction box and "focus" (blur everything around the area).
+- **Floating thumbnail** after each shot: click to edit, drag the file straight into Telegram, Slack, a browser or Explorer, swipe right to dismiss.
+- **Pin to screen** (`Ctrl+P`): keep a screenshot on top of all windows; mouse wheel zooms, `Ctrl+wheel` changes opacity.
+- **Custom hotkeys**, autostart and save folder in the settings.
+- **Updates itself** from GitHub releases, quietly, when you are not taking a screenshot (can be turned off).
 
-![Снимок окна](docs/window.png)
+![Window screenshot with shadow](docs/window.png)
 
-![Размытие](docs/blur.png)
+![Blur and redaction](docs/blur.png)
 
-![Выделение](docs/select.png)
+![Region selection with loupe](docs/select.png)
 
-![Настройки](docs/settings.png)
+![Settings](docs/settings.png)
 
-## Горячие клавиши
+## Hotkeys
 
-| Клавиши | Действие |
+| Keys | Action |
 |---|---|
-| `PrtSc`, `Ctrl+Shift+4` | Снимок области |
-| `Ctrl+Shift+5` | Снимок окна |
-| `Shift+PrtSc`, `Ctrl+Shift+3` | Весь экран (монитор под курсором) |
-| `Пробел` | До выделения — режим окна, во время — двигать рамку |
-| `A` `R` `O` `P` `H` `T` `N` `B` | Стрелка, прямоугольник, овал, карандаш, маркер, текст, нумерация, размытие |
-| `1`–`9`, `[` `]` | Цвет, толщина |
-| `Enter` / `Ctrl+C` | Скопировать и закрыть |
-| `Ctrl+S` · `Ctrl+P` · `Esc` | Сохранить как… · закрепить · отмена |
+| `PrtSc`, `Ctrl+Shift+4` | Capture a region |
+| `Ctrl+Shift+5` | Capture a window |
+| `Shift+PrtSc`, `Ctrl+Shift+3` | Full screen (the monitor under the cursor) |
+| `Space` | Before selecting: window mode; while selecting: move the frame |
+| `A` `R` `O` `P` `H` `T` `N` `B` | Arrow, rectangle, oval, pen, highlighter, text, counter, blur |
+| `1`–`9`, `[` `]` | Color, stroke width |
+| `Enter` / `Ctrl+C` | Copy and close |
+| `Ctrl+S` · `Ctrl+P` · `Esc` | Save as… · pin · cancel |
 
-Сочетания для снимков меняются в настройках (иконка в трее → «Настройки…»).
+Capture hotkeys can be changed in the settings (tray icon → «Настройки…», i.e. Settings).
 
-## Установка
+## Install
 
-1. Скачайте [`Kadr.exe`](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe) и запустите.
-2. Нажмите **«Установить»** — Кадр установится только для вас (права администратора не нужны), добавится в «Пуск» и в автозапуск.
-3. Нажмите `PrtSc`.
+1. Download [`Kadr.exe`](https://github.com/skybots-tg/kadr/releases/latest/download/Kadr.exe) and run it.
+2. Click **«Установить»** (Install). Kadr installs for the current user only (no admin rights needed) and adds itself to the Start menu and autostart.
+3. Press `PrtSc`.
 
-Windows может показать «Система Windows защитила ваш компьютер» — это из-за того, что у приложения нет платной цифровой подписи. Нажмите **«Подробнее» → «Выполнить в любом случае»**.
+Windows SmartScreen may say "Windows protected your PC" because the app has no paid code-signing certificate. Click **More info → Run anyway**.
 
-Можно и без установки: кнопка «Без установки» запускает Кадр прямо из скачанного файла.
+Prefer a portable app? The **«Без установки»** (Run without installing) button runs Kadr straight from the downloaded file.
 
-**Удаление:** «Параметры» → «Приложения» → «Кадр» → «Удалить» (или в настройках Кадра). Ваши снимки при этом не удаляются.
+**Uninstall:** Settings → Apps → Kadr → Uninstall (or from Kadr's own settings). Your screenshots are kept.
 
-## Куда попадают снимки
+## Where screenshots go
 
-В буфер обмена (PNG с прозрачностью — вставляется в мессенджеры и документы) и в папку `Картинки\Screenshots` с именами вида `Снимок экрана 2026-09-26 в 14.32.10.png`. Всё настраивается. Кадр работает полностью офлайн и ничего никуда не отправляет.
+To the clipboard (PNG with transparency, pastes into messengers and documents) and to `Pictures\Screenshots`, named like `Снимок экрана 2026-09-26 в 14.32.10.png` (Screenshot … at …). Everything is configurable. Kadr works fully offline and sends nothing anywhere.
 
-## Сборка из исходников
+## Build from source
 
-Нужен [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Requires the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (WPF).
 
 ```
 dotnet build -c Release
 dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o dist
 ```
 
-Картинки для README собираются скриптом `python promo/build.py`: он рендерит демо-страницы из `promo/src` и рисует поверх них настоящий интерфейс Кадра (`Kadr.exe --promo`).
+The README images are generated by `python promo/build.py`: it renders demo pages from `promo/src` and draws Kadr's real interface on top of them (`Kadr.exe --promo`).
 
----
+## License
 
-<sub>Kadr is a macOS-style screenshot tool for Windows: frozen-screen region capture with a loupe, Space for window shots with rounded corners and shadow, in-place markup (arrows, text, counters, four blur modes), floating thumbnail, pin-to-screen and custom hotkeys. UI is in Russian. MIT license. Icons are hand-drawn in the style of [Lucide](https://lucide.dev) (ISC).</sub>
+MIT. Icons are hand-drawn in the style of [Lucide](https://lucide.dev) (ISC).
